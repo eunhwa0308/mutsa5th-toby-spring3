@@ -10,24 +10,14 @@ import static java.lang.System.getenv;
 
 public class UserDao {
 
-    SimpleConnectionMaker connectionMaker = new SimpleConnectionMaker();
+    ConnectionMaker connectionMaker;
 
-
-//    public abstract Connection getConnection() throws ClassNotFoundException, SQLException;
-//        Map<String,String> env = getenv();
-//        String dbHost = env.get("DB_HOST");
-//        String dbUser = env.get("DB_USER");
-//        String dbPassword = env.get("DB_PASSWORD");
-//
-//
-//        Class.forName("com.mysql.cj.jdbc.Driver");
-//        Connection conn = DriverManager.getConnection(dbHost,dbUser,dbPassword);
-//
-//        return conn;
-
+    public UserDao() {
+        this.connectionMaker = new DConnectionMaker();
+    }
 
     public void add(User user) throws ClassNotFoundException, SQLException {
-        Connection conn = connectionMaker.makeNewConnection();
+        Connection conn = connectionMaker.makeConnection();
         PreparedStatement pstmt = conn.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
         pstmt.setString(1,user.getId());
         pstmt.setString(2,user.getName());
@@ -38,7 +28,7 @@ public class UserDao {
     }
     public User get(String id) throws ClassNotFoundException, SQLException {
 
-        Connection conn = connectionMaker.makeNewConnection();
+        Connection conn = connectionMaker.makeConnection();
         PreparedStatement ps = conn.prepareStatement("select id,name,password from users where id = ?;");
         ps.setString(1,id);
         ResultSet rs = ps.executeQuery();
