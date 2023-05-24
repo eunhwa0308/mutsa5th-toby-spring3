@@ -29,9 +29,14 @@ public class ConnectionChecker {
 
     }
     public void add() throws ClassNotFoundException, SQLException {
+        Map<String, String> env = getenv();
+        String dbHost = env.get("DB_HOST");
+        String dbUser = env.get("DB_USER");
+        String dbPassword = env.get("DB_PASSWORD");
+
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/spring-db","root","1234"
+                dbHost,dbUser,dbPassword
         );
 
         PreparedStatement pstmt = conn.prepareStatement("insert into users(id, name, password) values(?, ?, ?)");
@@ -43,11 +48,15 @@ public class ConnectionChecker {
 
     }
     public void select() throws ClassNotFoundException, SQLException {
+        Map<String, String> env = getenv();
+        String dbHost = env.get("DB_HOST");
+        String dbUser = env.get("DB_USER");
+        String dbPassword = env.get("DB_PASSWORD");
+
         Class.forName("com.mysql.cj.jdbc.Driver");
         Connection conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/spring-db","root","1234"
+                dbHost,dbUser,dbPassword
         );
-
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery("select * from users");
         rs = st.getResultSet();
